@@ -1,0 +1,28 @@
+{
+  "name": "code-sync-main",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "install": "npm install --workspaces",
+    "build": "npm run build --workspaces",
+    "postbuild": "if not exist server\\public mkdir server\\public && xcopy /E /Y client\\dist\\* server\\public\\",
+    "start": "npm start --workspace=server",
+    "preview": "npm run preview --workspace=client",
+    "deploy": "npm run build && npm run postbuild && npm run start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tanmay-110/Code-Collab.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Tanmay-110/Code-Collab/issues"
+  },
+  "homepage": "https://github.com/Tanmay-110/Code-Collab#readme"
+}

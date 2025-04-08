@@ -7,7 +7,7 @@ import toast from "react-hot-toast"
 import { LuClipboardPaste, LuCopy, LuRepeat } from "react-icons/lu"
 import ReactMarkdown from "react-markdown"
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
-import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism"
+import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism"
 
 function CopilotView() {
     const {socket} = useSocket()

@@ -15,7 +15,8 @@ app.use(express.json())
 
 app.use(cors())
 
-app.use(express.static(path.join(__dirname, "public"))) // Serve static files
+// Serve static files from the public directory
+app.use(express.static(path.join(__dirname, "..", "public")))
 
 const server = http.createServer(app)
 const io = new Server(server, {
@@ -262,11 +263,11 @@ io.on("connection", (socket) => {
 
 const PORT = process.env.PORT || 3000
 
-app.get("/", (req: Request, res: Response) => {
-	// Send the index.html file
+// Catch-all route to serve the index.html for client-side routing
+app.get("*", (req: Request, res: Response) => {
 	res.sendFile(path.join(__dirname, "..", "public", "index.html"))
 })
 
 server.listen(PORT, () => {
-	console.log(`Listening on port ${PORT}`)
+	console.log(`Server running at http://localhost:${PORT}`)
 })
