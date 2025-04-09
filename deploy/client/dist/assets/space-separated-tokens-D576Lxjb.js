@@ -1,0 +1,1 @@
+function o(r){return r.join(" ").trim()}var e={},a;function c(){if(a)return e;a=1,e.parse=p,e.stringify=u;var r="",i=" ",s=/[ \t\n\r\f]+/g;function p(t){var n=String(t||r).trim();return n===r?[]:n.split(s)}function u(t){return t.join(i).trim()}return e}export{c as r,o as s};

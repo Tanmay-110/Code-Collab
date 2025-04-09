@@ -13,7 +13,14 @@ const app = express()
 
 app.use(express.json())
 
-app.use(cors())
+// Configure CORS for production
+app.use(cors({
+	origin: process.env.NODE_ENV === 'production' 
+		? ['https://code-sync.vercel.app', /\.vercel\.app$/] 
+		: '*',
+	methods: ['GET', 'POST'],
+	credentials: true
+}))
 
 // Serve static files from the public directory
 app.use(express.static(path.join(__dirname, "..", "public")))
@@ -21,7 +28,11 @@ app.use(express.static(path.join(__dirname, "..", "public")))
 const server = http.createServer(app)
 const io = new Server(server, {
 	cors: {
-		origin: "*",
+		origin: process.env.NODE_ENV === 'production' 
+			? ['https://code-sync.vercel.app', /\.vercel\.app$/] 
+			: '*',
+		methods: ['GET', 'POST'],
+		credentials: true
 	},
 	maxHttpBufferSize: 1e8,
 	pingTimeout: 60000,
@@ -263,11 +274,22 @@ io.on("connection", (socket) => {
 
 const PORT = process.env.PORT || 3000
 
+// Health check route for Vercel
+app.get('/api/health', (req: Request, res: Response) => {
+	res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() })
+})
+
 // Catch-all route to serve the index.html for client-side routing
 app.get("*", (req: Request, res: Response) => {
 	res.sendFile(path.join(__dirname, "..", "public", "index.html"))
 })
 
-server.listen(PORT, () => {
-	console.log(`Server running at http://localhost:${PORT}`)
-})
+// Only start the server if this file is run directly
+if (require.main === module) {
+	server.listen(PORT, () => {
+		console.log(`Server running at http://localhost:${PORT}`)
+		console.log(`Environment: ${process.env.NODE_ENV || 'development'}`)
+	})
+}
+
+export default app
