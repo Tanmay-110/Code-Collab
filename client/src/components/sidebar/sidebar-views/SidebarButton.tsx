@@ -1,12 +1,13 @@
 import { useChatRoom } from "@/context/ChatContext"
 import { useViews } from "@/context/ViewContext"
-import { VIEWS } from "@/types/view"
+import { VIEWS, ViewType } from "./index"
 import { useState } from "react"
 import { Tooltip } from "react-tooltip"
-import { buttonStyles, tooltipStyles } from "../tooltipStyles"
+import { tooltipStyles } from "../tooltipStyles"
+import cn from "classnames"
 
 interface ViewButtonProps {
-    viewName: VIEWS
+    viewName: ViewType
     icon: JSX.Element
 }
 
@@ -16,7 +17,7 @@ const ViewButton = ({ viewName, icon }: ViewButtonProps) => {
     const { isNewMessage } = useChatRoom()
     const [showTooltip, setShowTooltip] = useState(true)
 
-    const handleViewClick = (viewName: VIEWS) => {
+    const handleViewClick = (viewName: ViewType) => {
         if (viewName === activeView) {
             setIsSidebarOpen(!isSidebarOpen)
         } else {
@@ -25,29 +26,37 @@ const ViewButton = ({ viewName, icon }: ViewButtonProps) => {
         }
     }
 
+    const isActive = activeView === viewName
+
     return (
         <div className="relative flex flex-col items-center">
             <button
                 onClick={() => handleViewClick(viewName)}
-                onMouseEnter={() => setShowTooltip(true)} // Show tooltip again on hover
-                className={`${buttonStyles.base} ${buttonStyles.hover}`}
+                onMouseEnter={() => setShowTooltip(true)}
+                className={cn(
+                    "flex items-center justify-center rounded-lg p-2.5 transition-all duration-200 ease-in-out",
+                    {
+                        "bg-white/10 text-primary shadow-lg": isActive,
+                        "text-text-secondary hover:bg-white/5 hover:text-text": !isActive,
+                    }
+                )}
                 {...(showTooltip && {
-                    "data-tooltip-id": `tooltip-${viewName}`,
-                    "data-tooltip-content": viewName,
+                    "data-tooltip-id": `tooltip-${String(viewName)}`,
+                    "data-tooltip-content": String(viewName),
                 })}
             >
                 <div className="flex items-center justify-center">{icon}</div>
                 {/* Show dot for new message in chat View Button */}
-                {viewName === VIEWS.CHATS && isNewMessage && (
-                    <div className="absolute right-0 top-0 h-3 w-3 rounded-full bg-primary"></div>
+                {viewName === "CHATS" && isNewMessage && (
+                    <div className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full bg-primary ring-2 ring-background"></div>
                 )}
             </button>
             {/* render the tooltip */}
             {showTooltip && (
                 <Tooltip
-                    id={`tooltip-${viewName}`}
+                    id={`tooltip-${String(viewName)}`}
                     place="right"
-                    offset={25}
+                    offset={15}
                     className="!z-50"
                     style={tooltipStyles}
                     noArrow={false}

@@ -211,7 +211,8 @@ io.on("connection", (socket) => {
 	})
 
 	// Handle cursor position
-	socket.on(SocketEvent.TYPING_START, ({ cursorPosition }) => {
+	socket.on(SocketEvent.TYPING_START, (data) => {
+		const cursorPosition = data?.cursorPosition || 0;
 		userSocketMap = userSocketMap.map((user) => {
 			if (user.socketId === socket.id) {
 				return { ...user, typing: true, cursorPosition }

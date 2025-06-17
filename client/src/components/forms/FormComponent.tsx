@@ -6,6 +6,7 @@ import { ChangeEvent, FormEvent, useEffect, useRef } from "react"
 import { toast } from "react-hot-toast"
 import { useLocation, useNavigate } from "react-router-dom"
 import { v4 as uuidv4 } from "uuid"
+import { LuUsers, LuUser } from "react-icons/lu"
 
 const FormComponent = () => {
     const location = useLocation()
@@ -88,40 +89,32 @@ const FormComponent = () => {
     }, [currentUser, location.state?.redirect, navigate, setStatus, socket, status])
 
     return (
-        <div className="flex w-full max-w-[500px] flex-col items-center justify-center gap-8 p-6 sm:w-[500px] sm:p-8">
-            <div className="text-center">
-                <h1 className="mb-3 text-4xl font-bold text-text">
-                    Welcome to <span className="text-primary">Code Collab</span>
-                </h1>
-                <p className="text-lg text-text-secondary">
-                    Join a room or create a new one to start coding together
-                </p>
-            </div>
+        <div className="flex w-full flex-col items-center justify-center gap-8">
             <form onSubmit={joinRoom} className="flex w-full flex-col gap-6">
-                <div className="space-y-2">
-                    <label htmlFor="roomId" className="block text-sm font-medium text-text-secondary">
-                        Room ID
-                    </label>
+                <div className="relative">
+                    <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                        <LuUsers className="h-5 w-5 text-gray-400" />
+                    </div>
                     <input
                         id="roomId"
                         type="text"
                         name="roomId"
                         placeholder="Enter room ID"
-                        className="input-field"
+                        className="w-full rounded-xl border border-white/10 bg-black/50 py-3 pl-11 pr-4 text-white placeholder:text-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
                         onChange={handleInputChanges}
                         value={currentUser.roomId}
                     />
                 </div>
-                <div className="space-y-2">
-                    <label htmlFor="username" className="block text-sm font-medium text-text-secondary">
-                        Username
-                    </label>
+                <div className="relative">
+                    <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                        <LuUser className="h-5 w-5 text-gray-400" />
+                    </div>
                     <input
                         id="username"
                         type="text"
                         name="username"
                         placeholder="Enter your username"
-                        className="input-field"
+                        className="w-full rounded-xl border border-white/10 bg-black/50 py-3 pl-11 pr-4 text-white placeholder:text-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
                         onChange={handleInputChanges}
                         value={currentUser.username}
                         ref={usernameRef}
@@ -129,16 +122,16 @@ const FormComponent = () => {
                 </div>
                 <button
                     type="submit"
-                    className="btn-primary mt-4"
+                    className="w-full rounded-xl bg-gradient-to-r from-purple-500 to-indigo-500 py-3 font-medium text-white transition-all duration-200 hover:from-purple-600 hover:to-indigo-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-black disabled:opacity-50"
                     disabled={status === USER_STATUS.ATTEMPTING_JOIN}
                 >
                     {status === USER_STATUS.ATTEMPTING_JOIN ? "Joining..." : "Join Room"}
                 </button>
             </form>
-            <div className="flex items-center gap-2 text-sm text-text-secondary">
+            <div className="flex items-center gap-3 text-sm text-gray-400">
                 <span>Don't have a room?</span>
                 <button
-                    className="btn-secondary font-medium"
+                    className="font-medium text-purple-400 hover:text-purple-300 focus:outline-none"
                     onClick={createNewRoomId}
                 >
                     Generate Room ID
